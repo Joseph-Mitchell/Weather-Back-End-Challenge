@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
 
-const todoSchema = new Schema({
+const accountSchema = new Schema({
     email: { type: String, required: true },
     password: { type: String, required: true }
 });
 
-const Todo = model("Todo", todoSchema);
+const Account = model("Account", accountSchema);
 
-export default Todo;
+export default Account;
