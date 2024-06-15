@@ -8,14 +8,12 @@ export default class AccountMiddleware {
                     .body("email")
                     .notEmpty()
                     .isString()
-                    .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g)
-                    .withMessage("An email is required"),
+                    .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g),
                 expressValidator
                     .body("password")
                     .notEmpty()
-                    .isString()
-                    .withMessage("A password is required"),
-                AccountValidator.handleValidationErrors,
+                    .isString(),
+                AccountMiddleware.handleValidationErrors,
             ];
         } catch (e) {
             console.log(e);

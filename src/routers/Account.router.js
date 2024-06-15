@@ -22,7 +22,8 @@ export default class AccountRouter {
     }
     
     #initialiseRouter() {
-        this.#router.post("/register", (req, res) => {
+        this.#router.post("/register", AccountMiddleware.validateRegDetails(), (req, res) => {
+            console.log("passed middleware");
             this.#controller.addAccount(req, res);
         });
     }

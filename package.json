@@ -5,11 +5,9 @@
     "main": "src/index.js",
     "type": "module",
     "scripts": {
-        "start": "NODE_ENV=prod nodemon src/index.js",
-        "start-win": "NODE_ENV=prod&&nodemon src/index.js",
-        "dev": "NODE_ENV=dev nodemon src/index.js",
-        "dev-win": "NODE_ENV=dev&&nodemon src/index.js",
-        "test": "set NODE_ENV=test  mocha --require test/hooks.cjs --timeout 10000 --exit --recursive",
+        "start": "NODE_ENV=dev nodemon src/index.js",
+        "start-win": "set NODE_ENV=dev&&nodemon src/index.js",
+        "test": "NODE_ENV=test  mocha --require test/hooks.cjs --timeout 10000 --exit --recursive",
         "test-win": "set NODE_ENV=test&&mocha --require test/hooks.cjs --timeout 10000 --exit --recursive"
     },
     "author": "",
