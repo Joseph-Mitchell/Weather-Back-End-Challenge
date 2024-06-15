@@ -94,5 +94,13 @@ describe("Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 400);
         });
+        
+        it("should respond 400 with missing password", async () => {
+            //Act
+            const actual = await requester.post("/register").send(testData.newAccounts.missingPassword);
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
     });
 })
