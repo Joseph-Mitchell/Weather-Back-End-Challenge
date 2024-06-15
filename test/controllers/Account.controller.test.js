@@ -62,4 +62,15 @@ describe("addAccount", () => {
         //Assert
         sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
     });
+    
+    it("should call res.status with 400 if addAccount resolved value does not have _id key", async () => {
+        //Arrange       
+        testAccount._id = undefined;
+        
+        //Act
+        await testController.addAccount(testRequest, stubbedResponse);
+        
+        //Assert
+        sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+    });
 });
