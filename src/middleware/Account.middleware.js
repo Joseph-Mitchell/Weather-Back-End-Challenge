@@ -1,6 +1,6 @@
 import * as expressValidator from "express-validator";
 
-export default class AccountValidator {
+export default class AccountMiddleware {
     static validateRegDetails = () => {
         try {
             return [
