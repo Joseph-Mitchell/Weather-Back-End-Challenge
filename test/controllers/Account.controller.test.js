@@ -41,17 +41,6 @@ describe("addAccount", () => {
         sinon.assert.calledWith(stubbedResponse.json, testAccount);
     });
     
-    it("should call res.status with 409 if findAccountByEmail.length is not 0", async () => {
-        //Arrange       
-        stubbedService.findAccountByEmail.resolves([{}]);
-        
-        //Act
-        await testController.addAccount(testRequest, stubbedResponse);
-        
-        //Assert
-        sinon.assert.calledOnceWithExactly(stubbedResponse.status, 409);
-    });
-    
     it("should call res.status with 500 if findAccountByEmail rejects", async () => {
         //Arrange       
         stubbedService.findAccountByEmail.rejects(new Error());
@@ -63,6 +52,17 @@ describe("addAccount", () => {
         sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
     });
     
+    it("should call res.status with 409 if findAccountByEmail.length is not 0", async () => {
+        //Arrange       
+        stubbedService.findAccountByEmail.resolves([{}]);
+        
+        //Act
+        await testController.addAccount(testRequest, stubbedResponse);
+        
+        //Assert
+        sinon.assert.calledOnceWithExactly(stubbedResponse.status, 409);
+    });
+    
     it("should call res.status with 400 if req does not have body key", async () => {
         //Arrange       
         testRequest = {};
@@ -72,6 +72,17 @@ describe("addAccount", () => {
         
         //Assert
         sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+    });
+    
+    it("should call res.status with 500 if addAccount rejects", async () => {
+        //Arrange       
+        stubbedService.addAccount.rejects(new Error());
+        
+        //Act
+        await testController.addAccount(testRequest, stubbedResponse);
+        
+        //Assert
+        sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
     });
     
     it("should call res.status with 400 if addAccount resolved value does not have _id key", async () => {
