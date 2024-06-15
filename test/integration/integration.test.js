@@ -63,6 +63,14 @@ describe("Integration Tests", () => {
             assert.equal(actual.status, 201);
         });
         
+        it("should respond 400 with no body in response", async () => {
+            //Act
+            const actual = await requester.post("/register");
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
+        
         it("should respond 400 with invalid email", async () => {
             //Act
             const actual = await requester.post("/register").send(testData.newAccounts.invalidEmail);
@@ -102,5 +110,7 @@ describe("Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 400);
         });
+        
+        
     });
 })
