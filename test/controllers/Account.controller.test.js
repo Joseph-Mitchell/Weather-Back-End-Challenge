@@ -156,7 +156,8 @@ describe("Controller", () => {
         
         it("should call res.status with 404 if findAccountByEmailAndPass resolved value does not have _id key", async () => {
             //Arrange       
-            testAccount._id = undefined;
+            testAccount = null;
+            stubbedService.findAccountByEmailAndPass.resolves(testAccount);
             
             //Act
             await testController.login(testRequest, stubbedResponse);

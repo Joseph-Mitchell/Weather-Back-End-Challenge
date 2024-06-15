@@ -187,5 +187,13 @@ describe("Integration Tests", () => {
             //Cleanup
             await database.connect()
         });
+        
+        it("should respond 404 if account could not be found", async () => {
+            //Act
+            const actual = await requester.post("/login").send(testData.newAccounts.valid);
+
+            //Assert
+            assert.equal(actual.status, 404);
+        });
     });
 });

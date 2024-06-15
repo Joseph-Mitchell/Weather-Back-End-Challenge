@@ -19,7 +19,7 @@ export default class AccountController {
                 return res.status(409).json({ message: "An account with this email already exists" });
 
             const newAccount = await this.#service.addAccount(req.body);
-
+            
             if (newAccount._id === undefined) throw invalidError;
             
             res.status(201).json(newAccount);
@@ -41,7 +41,7 @@ export default class AccountController {
             
             const account = await this.#service.findAccountByEmailAndPass(req.body.email, req.body.password);
 
-            if (account._id === undefined)
+            if (account === null)
                 return res.status(404).json({ message: "email or password incorrect" });
 
             res.status(200).json({ token: jwt.sign(account._id.toString(), process.env.SECRET) });
