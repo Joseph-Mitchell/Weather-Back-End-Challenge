@@ -137,5 +137,16 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
         });
+        
+        it("should call res.status with 400 if req does not have body key", async () => {
+            //Arrange       
+            testRequest = {};
+            
+            //Act
+            await testController.login(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+        });
     });
 });

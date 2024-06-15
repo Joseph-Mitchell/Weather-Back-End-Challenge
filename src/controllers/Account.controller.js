@@ -29,11 +29,18 @@ export default class AccountController {
     }
     
     async login(req, res) {
+        const invalidError = new Error("Invalid Account");
+        
         try {
+            if (!req.body) throw invalidError;
+            
             const account = await this.#service.findAccountByEmailAndPass(req.body.email, req.body.password);
             
             res.status(200).json(account);
         } catch (e) {
+            if (e === invalidError)
+                return res.status(400).json({ message: e.message });
+            
             res.status(500).json({ message: e.message });
         }
     }
