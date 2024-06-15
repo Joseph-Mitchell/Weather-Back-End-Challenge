@@ -34,8 +34,18 @@ export const newAccounts = {
         email: "nameemailcom",
         password: "password"
     },
-    invalidPassword: {
+    emptyEmail: {
+        email: "",
+        password: "password"
+    },
+    missingEmail: {
+        password: "password"
+    },
+    emptyPassword: {
         email: "name@email.com",
         password: ""
+    },
+    missingPassword: {
+        email: "name@email.com",
     }
 }
