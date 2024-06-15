@@ -33,7 +33,7 @@ describe("insert", () => {
         saveStub.resolves(testAccount);
         
         //Act
-        const actual = await testService.addAccount();
+        const actual = await testService.addAccount(testAccount);
         
         //Assert
         assert.deepEqual(actual, testAccount);

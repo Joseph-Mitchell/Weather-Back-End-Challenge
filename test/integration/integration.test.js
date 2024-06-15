@@ -11,6 +11,7 @@ import Account from '../../src/models/Account.model.js';
 import * as testData from "../data/testAccounts.js";
 import { assert } from "chai";
 import supertest from "supertest";
+import * as bcrypt from "bcrypt";
 
 describe("Integration Tests", () => {
     let server;
@@ -45,6 +46,9 @@ describe("Integration Tests", () => {
             throw new Error();
         }
         try {
+            testData.existingAccounts.map((account) => {
+                account.password = bcrypt.hashSync(account.password, 8);
+            })
             await Account.insertMany(testData.existingAccounts);
             console.log("Database populated with test todos");
         } catch (e) {
@@ -70,6 +74,15 @@ describe("Integration Tests", () => {
             
             //Assert
             assert.isNotNull(actual);
+        });
+        
+        it("should hash password when adding account", async () => {
+            //Act
+            await requester.post("/register").send(testData.newAccounts.valid);
+            const actual = await Account.findOne({ email: testData.newAccounts.valid.email });
+            
+            //Assert
+            assert.isOk(bcrypt.compareSync(testData.newAccounts.valid.password, actual.password));
         });
         
         it("should respond 400 with no body in response", async () => {

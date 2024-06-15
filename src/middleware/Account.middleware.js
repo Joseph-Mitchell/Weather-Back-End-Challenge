@@ -8,11 +8,13 @@ export default class AccountMiddleware {
                     .body("email")
                     .notEmpty()
                     .isString()
-                    .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g),
+                    .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g)
+                    .escape(),
                 expressValidator
                     .body("password")
                     .notEmpty()
-                    .isString(),
+                    .isString()
+                    .escape(),
                 AccountMiddleware.handleValidationErrors,
             ];
         } catch (e) {
