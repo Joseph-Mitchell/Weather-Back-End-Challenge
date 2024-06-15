@@ -47,5 +47,9 @@ export const newAccounts = {
     },
     missingPassword: {
         email: "name@email.com",
+    },
+    sameEmail: {
+        email: "johnbohn@email.com",
+        password: "password"
     }
 }

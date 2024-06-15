@@ -122,7 +122,15 @@ describe("Integration Tests", () => {
             assert.equal(actual.status, 500);
             
             //Cleanup
-            await database.connect
+            await database.connect()
+        });
+        
+        it("should respond 409 if account with matching email already exists", async () => {
+            //Act
+            const actual = await requester.post("/register").send(testData.newAccounts.sameEmail);
+            
+            //Assert
+            assert.equal(actual.status, 409);
         });
     });
 })
