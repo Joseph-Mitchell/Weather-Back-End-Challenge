@@ -10,7 +10,8 @@ export default class AccountController {
         
         try {
             const existing = await this.#service.findAccountByEmail(req.body.email);
-            if (existing.length === 0)
+
+            if (existing.length !== 0)
                 res.status(409).json({ message: "An account with this email already exists" });
             
             if (!req.body) throw invalidError;

@@ -5,23 +5,50 @@ import sinon from "sinon";
 import AccountController from "../../src/controllers/Account.controller.js";
 
 describe("addAccount", () => {  
-    it("should call res.status with 201 and res.json with account Object", async () => {
-        //Arrange
-        const stubbedService = { findAccountByEmail: sinon.stub(), addAccount: sinon.stub() };
-        const stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+    let stubbedService;
+    let stubbedResponse;
+    let testController;
+    let testAccount;
+    let testRequest;
+    
+    beforeEach(() => {
+        stubbedService = { findAccountByEmail: sinon.stub(), addAccount: sinon.stub() };
+        stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
         
-        const testController = new AccountController(stubbedService);
-        const testAccount = { _id: "1", email: "test@email.com", password: "testPass" };
-        const testRequest = { body: testAccount };
+        testController = new AccountController(stubbedService);
+        testAccount = { _id: "1", email: "test@email.com", password: "testPass" };
+        testRequest = { body: testAccount };
         
-        stubbedService.findAccountByEmail.resolves(0);
+        stubbedService.findAccountByEmail.resolves([]);
         stubbedService.addAccount.resolves(testAccount);
-        
+    });
+    
+    afterEach(() => {
+        stubbedService = undefined;
+        stubbedService = undefined;
+        stubbedResponse = undefined;
+        stubbedResponse = undefined;   
+        testController = undefined;
+        testAccount = undefined;
+    });
+    
+    it("should call res.status with 201 and res.json with account Object", async () => {
         //Act
-        const actual = await testController.addAccount(testRequest, stubbedResponse);
+        await testController.addAccount(testRequest, stubbedResponse);
         
         //Assert
-        sinon.assert.calledWith(stubbedResponse.status, 201);
+        sinon.assert.calledWithExactly(stubbedResponse.status, 201);
         sinon.assert.calledWith(stubbedResponse.json, testAccount);
+    });
+    
+    it("should call res.status with 409 if findAccountByEmail.length is not 0", async () => {
+        //Arrange       
+        stubbedService.findAccountByEmail.resolves([{}]);
+        
+        //Act
+        await testController.addAccount(testRequest, stubbedResponse);
+        
+        //Assert
+        sinon.assert.calledWith(stubbedResponse.status, 409);
     });
 });
