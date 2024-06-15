@@ -111,6 +111,18 @@ describe("Integration Tests", () => {
             assert.equal(actual.status, 400);
         });
         
-        
+        it("should respond 500 if database offline", async () => {
+            //Arrange
+            await database.close();
+            
+            //Act
+            const actual = await requester.post("/register").send(testData.newAccounts.valid);
+            
+            //Assert
+            assert.equal(actual.status, 500);
+            
+            //Cleanup
+            await database.connect
+        });
     });
 })
