@@ -52,6 +52,17 @@ describe("addAccount", () => {
         sinon.assert.calledOnceWithExactly(stubbedResponse.status, 409);
     });
     
+    it("should call res.status with 500 if findAccountByEmail rejects", async () => {
+        //Arrange       
+        stubbedService.findAccountByEmail.rejects(new Error());
+        
+        //Act
+        await testController.addAccount(testRequest, stubbedResponse);
+        
+        //Assert
+        sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+    });
+    
     it("should call res.status with 400 if req does not have body key", async () => {
         //Arrange       
         testRequest = {};
