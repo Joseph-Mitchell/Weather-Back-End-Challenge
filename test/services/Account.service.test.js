@@ -1,4 +1,4 @@
-import { beforeEach, describe, it } from "mocha";
+import { describe, it } from "mocha";
 import { assert } from "chai";
 import sinon from "sinon";
 
@@ -15,7 +15,7 @@ describe("findByEmail", () => {
         
         
         //Act
-        const actual = await testService.findByEmail();
+        const actual = await testService.findAccountByEmail();
         
         //Assert
         assert.deepEqual(actual, testAccount)
@@ -33,7 +33,7 @@ describe("insert", () => {
         saveStub.resolves(testAccount);
         
         //Act
-        const actual = await testService.addNew();
+        const actual = await testService.addAccount();
         
         //Assert
         assert.deepEqual(actual, testAccount);
