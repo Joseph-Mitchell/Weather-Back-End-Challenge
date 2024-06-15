@@ -14,4 +14,8 @@ export default class AccountService {
     async findAccountByEmail(email) {
         return await Account.find({ email: email });
     }
+    
+    async findAccountByEmailAndPass(email, password) {
+        return await Account.find({ email: email, password: password });
+    }
 }
