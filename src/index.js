@@ -1,6 +1,6 @@
 import Config from './config/Config.js';
 import Server from "./server/Server.js";
-import Database from "./db/Database.js";
+import Database from "./database/Database.js";
 
 Config.load();
 const { PORT, HOST, DB_URI } = process.env;
