@@ -63,6 +63,15 @@ describe("Integration Tests", () => {
             assert.equal(actual.status, 201);
         });
         
+        it("should add account to database when request valid", async () => {
+            //Act
+            await requester.post("/register").send(testData.newAccounts.valid);
+            const actual = await Account.findOne({ email: testData.newAccounts.valid.email });
+            
+            //Assert
+            assert.isNotNull(actual);
+        });
+        
         it("should respond 400 with no body in response", async () => {
             //Act
             const actual = await requester.post("/register");
