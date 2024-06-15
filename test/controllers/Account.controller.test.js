@@ -154,7 +154,7 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
         });
         
-        it("should call res.status with 400 if findAccountByEmailAndPass resolved value does not have _id key", async () => {
+        it("should call res.status with 404 if findAccountByEmailAndPass resolved value does not have _id key", async () => {
             //Arrange       
             testAccount._id = undefined;
             
@@ -162,7 +162,7 @@ describe("Controller", () => {
             await testController.login(testRequest, stubbedResponse);
             
             //Assert
-            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 404);
         });
     });
 });

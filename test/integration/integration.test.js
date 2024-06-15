@@ -165,5 +165,13 @@ describe("Integration Tests", () => {
             assert.equal(actual.status, 200);
             assert.isOk(jwt.verify(actual.body.token, process.env.SECRET))
         });
+        
+        it("should respond 400 with no body in response", async () => {
+            //Act
+            const actual = await requester.post("/login");
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
     });
 });

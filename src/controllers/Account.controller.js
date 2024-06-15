@@ -11,7 +11,7 @@ export default class AccountController {
         const invalidError = new Error("Invalid Account");
         
         try {
-            if (!req.body) throw invalidError;
+            if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
             
             const existing = await this.#service.findAccountByEmail(req.body.email);
             
@@ -27,6 +27,8 @@ export default class AccountController {
             if (e === invalidError)
                 return res.status(400).json({ message: e.message });
             
+            console.log
+            
             res.status(500).json({ message: e.message });
         }
     }
@@ -35,11 +37,12 @@ export default class AccountController {
         const invalidError = new Error("Invalid Account");
         
         try {
-            if (!req.body) throw invalidError;
+            if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
             
             const account = await this.#service.findAccountByEmailAndPass(req.body.email, req.body.password);
 
-            if (account._id === undefined) throw invalidError;
+            if (account._id === undefined)
+                return res.status(404).json({ message: "email or password incorrect" });
 
             res.status(200).json({ token: jwt.sign(account._id.toString(), process.env.SECRET) });
         } catch (e) {
