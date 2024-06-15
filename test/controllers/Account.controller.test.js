@@ -126,5 +126,16 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
             sinon.assert.calledWith(stubbedResponse.json, testAccount);
         });
+        
+        it("should call res.status with 500 if findAccountByEmail rejects", async () => {
+            //Arrange       
+            stubbedService.findAccountByEmailAndPass.rejects(new Error());
+            
+            //Act
+            await testController.login(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
     });
 });

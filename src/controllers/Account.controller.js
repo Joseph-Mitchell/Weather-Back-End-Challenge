@@ -29,9 +29,12 @@ export default class AccountController {
     }
     
     async login(req, res) {
-        const account = await this.#service.findAccountByEmailAndPass(req.body.email, req.body.password);
+        try {
+            const account = await this.#service.findAccountByEmailAndPass(req.body.email, req.body.password);
             
-        res.status(200).json(account);
-
+            res.status(200).json(account);
+        } catch (e) {
+            res.status(500).json({ message: e.message });
+        }
     }
 }
