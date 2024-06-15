@@ -25,5 +25,8 @@ export default class AccountRouter {
         this.#router.post("/register", AccountMiddleware.validateRegDetails(), (req, res) => {
             this.#controller.addAccount(req, res);
         });
+        this.#router.post("/login", (req, res) => {
+            this.#controller.login(req, res);
+        });
     }
 }

@@ -22,7 +22,7 @@ describe("Controller", () => {
             testAccount = { _id: "1", email: "test@email.com", password: "testPass" };
             testRequest = { body: testAccount };
             
-            stubbedService.findAccountByEmail.resolves([]);
+            stubbedService.findAccountByEmail.resolves(null);
             stubbedService.addAccount.resolves(testAccount);
         });
         
@@ -55,9 +55,9 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
         });
         
-        it("should call res.status with 409 if findAccountByEmail.length is not 0", async () => {
+        it("should call res.status with 409 if findAccountByEmail doesn't null", async () => {
             //Arrange       
-            stubbedService.findAccountByEmail.resolves([{}]);
+            stubbedService.findAccountByEmail.resolves({});
             
             //Act
             await testController.addAccount(testRequest, stubbedResponse);
@@ -129,7 +129,7 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            assert.equal(jwt.verify(stubbedResponse.json.getCall(0).args[0], process.env.SECRET), testAccount._id);
+            assert.equal(jwt.verify(stubbedResponse.json.getCall(0).args[0].token, process.env.SECRET), testAccount._id);
         });
         
         it("should call res.status with 500 if findAccountByEmail rejects", async () => {

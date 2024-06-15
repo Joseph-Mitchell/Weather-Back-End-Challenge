@@ -13,6 +13,8 @@ import { assert } from "chai";
 import supertest from "supertest";
 import * as bcrypt from "bcrypt";
 
+import jwt from "jsonwebtoken";
+
 describe("Integration Tests", () => {
     let server;
     let database;
@@ -153,4 +155,15 @@ describe("Integration Tests", () => {
             assert.equal(actual.status, 409);
         });
     });
-})
+    
+    describe("login", () => {
+        it("should respond 201 to valid request", async () => {
+            //Act
+            const actual = await requester.post("/login").send(testData.existingAccounts[0]);
+
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.isOk(jwt.verify(actual.body.token, process.env.SECRET))
+        });
+    });
+});

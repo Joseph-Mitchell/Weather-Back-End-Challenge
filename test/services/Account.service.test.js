@@ -10,7 +10,7 @@ describe("findAccountByEmail", () => {
         //Arrange
         const testService = new AccountService();
         const testAccount = { email: "test@email.com", password: "testPass" };
-        const findStub = sinon.stub(Account, "find");
+        const findStub = sinon.stub(Account, "findOne");
         findStub.resolves(testAccount);
         
         
@@ -47,7 +47,7 @@ describe("findAccountByEmailAndPass", () => {
         //Arrange
         const testService = new AccountService();
         const testAccount = { email: "test@email.com", password: "testPass" };
-        const findStub = sinon.stub(Account, "find");
+        const findStub = sinon.stub(Account, "findOne");
         findStub.resolves(testAccount);
         
         //Act

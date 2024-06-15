@@ -14,12 +14,13 @@ export default class AccountController {
             if (!req.body) throw invalidError;
             
             const existing = await this.#service.findAccountByEmail(req.body.email);
-            if (existing.length !== 0)
+            
+            if (existing !== null)
                 return res.status(409).json({ message: "An account with this email already exists" });
-            
+
             const newAccount = await this.#service.addAccount(req.body);
-            
-            if (!newAccount._id) throw invalidError;
+
+            if (newAccount._id === undefined) throw invalidError;
             
             res.status(201).json(newAccount);
         } catch (e) {
@@ -37,10 +38,10 @@ export default class AccountController {
             if (!req.body) throw invalidError;
             
             const account = await this.#service.findAccountByEmailAndPass(req.body.email, req.body.password);
-            
-            if (!account._id) throw invalidError;
-            
-            res.status(200).json(jwt.sign(account._id, process.env.SECRET));
+
+            if (account._id === undefined) throw invalidError;
+
+            res.status(200).json({ token: jwt.sign(account._id.toString(), process.env.SECRET) });
         } catch (e) {
             if (e === invalidError)
                 return res.status(400).json({ message: e.message });
