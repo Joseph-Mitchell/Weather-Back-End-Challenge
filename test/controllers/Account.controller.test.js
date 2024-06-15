@@ -1,7 +1,10 @@
 import { beforeEach, describe, it } from "mocha";
 import sinon from "sinon";
+import jwt from "jsonwebtoken";
 
 import AccountController from "../../src/controllers/Account.controller.js";
+import { assert } from "chai";
+import Config from "../../src/config/Config.js";
 
 describe("Controller", () => {
     let stubbedService;
@@ -118,13 +121,15 @@ describe("Controller", () => {
             testAccount = undefined;
         });
         
-        it("should call res.status with 200 and res.json with account Object", async () => {
+        it("should call res.status with 200 and res.json encoded _id", async () => {
+            Config.load();
+            
             //Act
             await testController.login(testRequest, stubbedResponse);
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, testAccount);
+            assert.equal(jwt.verify(stubbedResponse.json.getCall(0).args[0], process.env.SECRET), testAccount._id);
         });
         
         it("should call res.status with 500 if findAccountByEmail rejects", async () => {
@@ -141,6 +146,17 @@ describe("Controller", () => {
         it("should call res.status with 400 if req does not have body key", async () => {
             //Arrange       
             testRequest = {};
+            
+            //Act
+            await testController.login(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+        });
+        
+        it("should call res.status with 400 if findAccountByEmailAndPass resolved value does not have _id key", async () => {
+            //Arrange       
+            testAccount._id = undefined;
             
             //Act
             await testController.login(testRequest, stubbedResponse);

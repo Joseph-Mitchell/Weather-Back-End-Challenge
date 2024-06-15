@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 export default class AccountController {
     #service;
     
@@ -36,7 +38,9 @@ export default class AccountController {
             
             const account = await this.#service.findAccountByEmailAndPass(req.body.email, req.body.password);
             
-            res.status(200).json(account);
+            if (!account._id) throw invalidError;
+            
+            res.status(200).json(jwt.sign(account._id, process.env.SECRET));
         } catch (e) {
             if (e === invalidError)
                 return res.status(400).json({ message: e.message });

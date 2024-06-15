@@ -50,10 +50,8 @@ describe("Integration Tests", () => {
                 account.password = bcrypt.hashSync(account.password, 8);
             })
             await Account.insertMany(testData.existingAccounts);
-            console.log("Database populated with test todos");
         } catch (e) {
             console.log(e.message);
-            console.log("Error inserting");
             throw new Error();
         }
     });
