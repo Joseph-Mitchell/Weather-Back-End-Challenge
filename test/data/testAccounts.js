@@ -29,5 +29,13 @@ export const newAccounts = {
     valid: {
         email: "name@email.com",
         password: "password"
+    }, 
+    invalidEmail: {
+        email: "nameemailcom",
+        password: "password"
+    },
+    invalidPassword: {
+        email: "name@email.com",
+        password: ""
     }
 }

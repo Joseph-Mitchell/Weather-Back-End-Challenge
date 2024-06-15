@@ -55,12 +55,20 @@ describe("Integration Tests", () => {
     });
     
     describe("register account", () => {
-        it("should respond with 201 to valid request", async () => {
+        it("should respond 201 to valid request", async () => {
             //Act
             const actual = await requester.post("/register").send(testData.newAccounts.valid);
             
             //Assert
             assert.equal(actual.status, 201);
+        });
+        
+        it("should respond 400 with invalid email", async () => {
+            //Act
+            const actual = await requester.post("/register").send(testData.newAccounts.invalidEmail);
+            
+            //Assert
+            assert.equal(actual.status, 400);
         });
     });
 })
