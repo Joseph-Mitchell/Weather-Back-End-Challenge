@@ -9,12 +9,11 @@ export default class AccountController {
         const invalidError = new Error("Invalid Account");
         
         try {
-            const existing = await this.#service.findAccountByEmail(req.body.email);
-
-            if (existing.length !== 0)
-                res.status(409).json({ message: "An account with this email already exists" });
-            
             if (!req.body) throw invalidError;
+            
+            const existing = await this.#service.findAccountByEmail(req.body.email);
+            if (existing.length !== 0)
+                return res.status(409).json({ message: "An account with this email already exists" });
             
             const newAccount = await this.#service.addAccount(req.body);
             
@@ -23,7 +22,7 @@ export default class AccountController {
             res.status(201).json(newAccount);
         } catch (e) {
             if (e === invalidError)
-                res.status(400).json({ message: e.message });
+                return res.status(400).json({ message: e.message });
             
             res.status(500).json({ message: e.message });
         }

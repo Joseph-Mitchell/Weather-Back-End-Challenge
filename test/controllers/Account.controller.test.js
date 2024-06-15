@@ -37,7 +37,7 @@ describe("addAccount", () => {
         await testController.addAccount(testRequest, stubbedResponse);
         
         //Assert
-        sinon.assert.calledWithExactly(stubbedResponse.status, 201);
+        sinon.assert.calledOnceWithExactly(stubbedResponse.status, 201);
         sinon.assert.calledWith(stubbedResponse.json, testAccount);
     });
     
@@ -49,6 +49,17 @@ describe("addAccount", () => {
         await testController.addAccount(testRequest, stubbedResponse);
         
         //Assert
-        sinon.assert.calledWith(stubbedResponse.status, 409);
+        sinon.assert.calledOnceWithExactly(stubbedResponse.status, 409);
+    });
+    
+    it("should call res.status with 400 if req does not have body key", async () => {
+        //Arrange       
+        testRequest = {};
+        
+        //Act
+        await testController.addAccount(testRequest, stubbedResponse);
+        
+        //Assert
+        sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
     });
 });
