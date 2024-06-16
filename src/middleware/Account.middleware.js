@@ -1,6 +1,23 @@
 import * as expressValidator from "express-validator";
+import jwt from "jsonwebtoken";
 
 export default class AccountMiddleware {
+    static authenticateToken = () => {
+        let token = req.headers["x-access-token"];
+        
+        if (!token) {
+            return res.status(401).send({ message: "No token provided" });
+        }
+        
+        jwt.verify(token, process.env.SECRET, (err, decoded) => {
+            if (err)
+                return res.status(401).send({ message: "Token not recognized" });
+            
+            req.userId = decoded.token;
+            next();
+        });
+    }
+    
     static validateRegDetails = () => {
         try {
             return [

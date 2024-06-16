@@ -48,10 +48,11 @@ describe("Integration Tests", () => {
             throw new Error();
         }
         try {
-            testData.existingAccounts.map((account) => {
-                account.password = bcrypt.hashSync(account.password, 8);
-            })
-            await Account.insertMany(testData.existingAccounts);
+            let testDataEncrypted = [];
+            testData.existingAccounts.forEach((account) => {
+                testDataEncrypted.push({ email: account.email, password: bcrypt.hashSync(account.password, 8) });
+            });
+            await Account.insertMany(testDataEncrypted);
         } catch (e) {
             console.log(e.message);
             throw new Error();

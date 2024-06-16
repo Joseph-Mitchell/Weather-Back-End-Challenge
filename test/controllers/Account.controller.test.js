@@ -1,6 +1,7 @@
 import { beforeEach, describe, it } from "mocha";
 import sinon from "sinon";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 import AccountController from "../../src/controllers/Account.controller.js";
 import { assert } from "chai";
@@ -11,6 +12,7 @@ describe("Controller", () => {
     let stubbedResponse;
     let testController;
     let testAccount;
+    let testAccountEncrypted;
     let testRequest;
 
     describe("addAccount", () => {
@@ -102,14 +104,15 @@ describe("Controller", () => {
     
     describe("login", () => {
         beforeEach(() => {
-            stubbedService = { findAccountByEmailAndPass: sinon.stub() };
+            stubbedService = { findAccountByEmail: sinon.stub() };
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
             testController = new AccountController(stubbedService);
             testAccount = { _id: "1", email: "test@email.com", password: "testPass" };
+            testAccountEncrypted = { _id: "1", email: "test@email.com", password: bcrypt.hashSync("testPass", 8) };
             testRequest = { body: testAccount };
             
-            stubbedService.findAccountByEmailAndPass.resolves(testAccount);
+            stubbedService.findAccountByEmail.resolves(testAccountEncrypted);
         });
         
         afterEach(() => {
@@ -119,6 +122,7 @@ describe("Controller", () => {
             stubbedResponse = undefined;
             testController = undefined;
             testAccount = undefined;
+            testAccountEncrypted = undefined;
         });
         
         it("should call res.status with 200 and res.json encoded _id", async () => {
@@ -134,7 +138,7 @@ describe("Controller", () => {
         
         it("should call res.status with 500 if findAccountByEmail rejects", async () => {
             //Arrange       
-            stubbedService.findAccountByEmailAndPass.rejects(new Error());
+            stubbedService.findAccountByEmail.rejects(new Error());
             
             //Act
             await testController.login(testRequest, stubbedResponse);
@@ -157,7 +161,7 @@ describe("Controller", () => {
         it("should call res.status with 404 if findAccountByEmailAndPass resolved value does not have _id key", async () => {
             //Arrange       
             testAccount = null;
-            stubbedService.findAccountByEmailAndPass.resolves(testAccount);
+            stubbedService.findAccountByEmail.resolves(testAccount);
             
             //Act
             await testController.login(testRequest, stubbedResponse);
