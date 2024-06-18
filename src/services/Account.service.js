@@ -21,7 +21,7 @@ export default class AccountService {
         return await Account.findOne({ email: email, password: password });
     }
     
-    async findAccountById(id) {
-        return await Account.findById({ _id: id });
+    async updateAccountPassword(id, password) {
+        return await Account.findByIdAndUpdate({ _id: id }, { password: password });
     }
 }
