@@ -218,5 +218,16 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
         });
+        
+        it("should respond with 500 if updateAccountPassword rejects", async () => {
+            //Arrange
+            stubbedService.updateAccountPassword.rejects(new Error());
+            
+            //Act
+            await testController.changePassword(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
     });
 });
