@@ -207,5 +207,16 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
         });
+            
+        it("should respond with 400 if no body in request", async () => {
+            //Arrange
+            testRequest = {};
+            
+            //Act
+            await testController.changePassword(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+        });
     });
 });
