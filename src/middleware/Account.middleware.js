@@ -2,7 +2,7 @@ import * as expressValidator from "express-validator";
 import jwt from "jsonwebtoken";
 
 export default class AccountMiddleware {
-    static authenticateToken = () => {
+    static authenticateToken = (req, res, next) => {
         let token = req.headers["x-access-token"];
         
         if (!token) {
