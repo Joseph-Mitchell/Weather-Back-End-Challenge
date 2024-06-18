@@ -12,7 +12,7 @@ export default class AccountMiddleware {
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if (err)
                 return res.status(401).send({ message: "Token not recognized" });
-            console.log(decoded);
+
             req.userId = decoded.id;
             next();
         });

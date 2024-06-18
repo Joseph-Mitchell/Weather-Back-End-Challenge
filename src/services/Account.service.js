@@ -10,7 +10,7 @@ export default class AccountService {
             console.log(e);
             throw new Error("Invalid Account")
         }
-        return await account.save(account);
+        return await account.save();
     }
     
     async findAccountByEmail(email) {
@@ -19,5 +19,9 @@ export default class AccountService {
     
     async findAccountByEmailAndPass(email, password) {
         return await Account.findOne({ email: email, password: password });
+    }
+    
+    async findAccountById(id) {
+        return await Account.findById({ _id: id });
     }
 }
