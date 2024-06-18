@@ -47,7 +47,7 @@ export default class AccountController {
                 return res.status(404).json({ message: "email or password incorrect" });
             }
                 
-            res.status(200).json({ token: jwt.sign(account._id.toString(), process.env.SECRET) });
+            res.status(200).json({ token: jwt.sign({ id: account._id.toString() }, process.env.SECRET) });
         } catch (e) {
             if (e === invalidError)
                 return res.status(400).json({ message: e.message });

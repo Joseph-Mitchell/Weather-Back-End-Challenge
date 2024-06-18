@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export default class AccountMiddleware {
     static authenticateToken = (req, res, next) => {
         let token = req.headers["x-access-token"];
-        
+
         if (!token) {
             return res.status(401).send({ message: "No token provided" });
         }
@@ -12,8 +12,8 @@ export default class AccountMiddleware {
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if (err)
                 return res.status(401).send({ message: "Token not recognized" });
-            
-            req.userId = decoded.token;
+            console.log(decoded);
+            req.userId = decoded.id;
             next();
         });
     }

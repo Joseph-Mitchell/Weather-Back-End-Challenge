@@ -133,7 +133,7 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            assert.equal(jwt.verify(stubbedResponse.json.getCall(0).args[0].token, process.env.SECRET), testAccount._id);
+            assert.equal(jwt.verify(stubbedResponse.json.getCall(0).args[0].token, process.env.SECRET).id, testAccount._id);
         });
         
         it("should call res.status with 500 if findAccountByEmail rejects", async () => {
