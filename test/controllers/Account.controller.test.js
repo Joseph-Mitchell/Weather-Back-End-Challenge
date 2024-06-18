@@ -43,7 +43,7 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 201);
-            sinon.assert.calledWith(stubbedResponse.json, testAccount);
+            sinon.assert.calledWith(stubbedResponse.json, { id: testAccount._id, email: testAccount.email });
         });
         
         it("should call res.status with 500 if findAccountByEmail rejects", async () => {
@@ -168,6 +168,44 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 404);
+        });
+    });
+    
+    describe("changePassword", () => {
+        
+        beforeEach(() => {
+            stubbedService = { updateAccountPassword: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new AccountController(stubbedService);
+            testAccount = { _id: "1", email: "test@email.com", password: "testPass" };
+            testAccountEncrypted = { _id: "1", email: "test@email.com", password: bcrypt.hashSync("testPass", 8) };
+            testRequest = {
+                body: {
+                    id: testAccount._id,
+                    password: "epic"
+                }
+            };
+            
+            stubbedService.updateAccountPassword.resolves(testAccountEncrypted);
+        });
+        
+        afterEach(() => {
+            stubbedService = undefined;
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testAccount = undefined;
+            testAccountEncrypted = undefined;
+        });
+        
+        it("should respond with 204 in normal circumstances", async () => {            
+            //Act
+            await testController.changePassword(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
         });
     });
 });
