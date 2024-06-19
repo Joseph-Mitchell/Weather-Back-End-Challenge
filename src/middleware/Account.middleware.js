@@ -13,7 +13,8 @@ export default class AccountMiddleware {
             if (err)
                 return res.status(401).send({ message: "Token not recognized" });
 
-            req.userId = decoded.id;
+            req.body.userId = decoded;
+
             next();
         });
     }

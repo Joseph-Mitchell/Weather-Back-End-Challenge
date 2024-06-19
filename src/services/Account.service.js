@@ -22,6 +22,6 @@ export default class AccountService {
     }
     
     async updateAccountPassword(id, password) {
-        return await Account.findByIdAndUpdate({ _id: id }, { password: password });
+        return await Account.findByIdAndUpdate(id, { password: password });
     }
 }

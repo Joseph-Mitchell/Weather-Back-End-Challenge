@@ -28,5 +28,8 @@ export default class AccountRouter {
         this.#router.post("/login", (req, res) => {
             this.#controller.login(req, res);
         });
+        this.#router.put("/changepass", AccountMiddleware.authenticateToken, (req, res) => {
+            this.#controller.changePassword(req, res);
+        });
     }
 }

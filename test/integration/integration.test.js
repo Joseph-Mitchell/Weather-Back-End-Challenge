@@ -197,4 +197,26 @@ describe("Integration Tests", () => {
             assert.equal(actual.status, 404);
         });
     });
+    
+    describe("change password", () => {
+        it("should respond 204 to a valid request", async () => {
+            //Act
+            const testPass = "newPass";
+            
+            const dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
+
+            const encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+
+            const actualResponse = await requester
+                .put("/changepass")
+                .send({ password: testPass })
+                .set("x-access-token", encryptedId);
+
+            const actualAccount = await Account.findById(dbAccount._id);
+             
+            //Assert
+            assert.equal(actualResponse.status, 204);
+            assert.isOk(bcrypt.compareSync(testPass, actualAccount.password));
+        })
+    })
 });

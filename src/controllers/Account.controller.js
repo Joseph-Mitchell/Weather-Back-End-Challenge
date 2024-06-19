@@ -62,12 +62,13 @@ export default class AccountController {
         try {
             if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
             
-            const account = await this.#service.updateAccountPassword(req.body.email);
+            const encryptedPass = bcrypt.hashSync(req.body.password, 8);
+            const account = await this.#service.updateAccountPassword(req.body.userId, encryptedPass);
 
             if (account === null)
-                return res.status(404).json({ message: "could not find account" });           
-                
-            res.status(204);
+                return res.status(404).json({ message: "could not find account" });    
+            
+            res.status(204).json({ message: "password changed successfully" });
         } catch (e) {
             if (e === invalidError)
                 return res.status(400).json({ message: e.message });
