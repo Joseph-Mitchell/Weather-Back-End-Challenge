@@ -246,8 +246,10 @@ describe("Integration Tests", () => {
         });
         
         it("should respond 401 if request has unrecognized token", async () => {
-            //Act
+            //Arrange
             encryptedId = "hjytrd";
+            
+            //Act
             const actualResponse = await requester
                 .put("/changepass")
                 .send({ password: testPass })
@@ -258,9 +260,28 @@ describe("Integration Tests", () => {
             assert.equal(actualResponse.body.message, "Token not recognized");
         });
         
-        it("should respond 404 if request has no matching id", async () => {
+        it("should respond 500 if database is offline", async () => {
+            //Arrange
+            database.close();
+            
             //Act
+            const actualResponse = await requester
+                .put("/changepass")
+                .send({ password: testPass })
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 500);
+            
+            //Cleanup
+            await database.connect();
+        });
+        
+        it("should respond 404 if request has no matching id", async () => {
+            //Arrange
             encryptedId = jwt.sign("666eb3347fddf9131e9fe94d", process.env.SECRET);
+            
+            //Act
             const actualResponse = await requester
                 .put("/changepass")
                 .send({ password: testPass })
