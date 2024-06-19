@@ -88,7 +88,7 @@ export default class AccountController {
             if (account === null)
                 return res.status(404).json({ message: "could not find account" });    
             
-            res.status(200).json({ favourites: account.favourites });
+            res.status(200).json(account.favourites);
         } catch (e) {
             if (e === invalidError)
                 return res.status(400).json({ message: e.message });

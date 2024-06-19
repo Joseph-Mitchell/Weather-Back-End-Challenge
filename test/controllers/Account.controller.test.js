@@ -14,6 +14,7 @@ describe("Controller", () => {
     let testAccount;
     let testAccountEncrypted;
     let testRequest;
+    let testFavourites;
 
     describe("addAccount", () => {
         beforeEach(() => {
@@ -249,26 +250,27 @@ describe("Controller", () => {
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
             testController = new AccountController(stubbedService);
+            testFavourites = [
+                {
+                    "name": "London",
+                    "lat": 51.5073219,
+                    "lon": -0.1276474,
+                    "country": "GB",
+                    "state": "England"
+                },
+                {
+                    "name": "Glasgow",
+                    "lat": 55.8609825,
+                    "lon": -4.2488787,
+                    "country": "GB",
+                    "state": "Scotland"
+                },
+            ];
             testAccount = {
                 _id: "1",
                 email: "test@email.com",
                 password: "testPass",
-                favourites: [
-                    {
-                        "name": "London",
-                        "lat": 51.5073219,
-                        "lon": -0.1276474,
-                        "country": "GB",
-                        "state": "England"
-                    },
-                    {
-                        "name": "Glasgow",
-                        "lat": 55.8609825,
-                        "lon": -4.2488787,
-                        "country": "GB",
-                        "state": "Scotland"
-                    },
-                ]
+                favourites: testFavourites
             };
             testRequest = {
                 body: {
@@ -286,6 +288,7 @@ describe("Controller", () => {
             stubbedResponse = undefined;
             testController = undefined;
             testAccount = undefined;
+            testFavourites = undefined;
         });
         
         it("should respond with 200 in normal circumstances", async () => {
@@ -294,6 +297,20 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledOnceWithExactly(stubbedResponse.json, testFavourites);
+        });
+        
+        it("should respond with 200 when account has no favourites", async () => {
+            //Arrange
+            testFavourites = [];
+            testAccount.favourites = testFavourites;
+            
+            //Act
+            await testController.getFavourites(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledOnceWithExactly(stubbedResponse.json, testFavourites);
         });
         
         it("should respond with 400 if request has no body", async () => {
