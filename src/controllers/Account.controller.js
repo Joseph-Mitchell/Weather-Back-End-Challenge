@@ -76,4 +76,24 @@ export default class AccountController {
             res.status(500).json({ message: e.message });
         }
     }
+    
+    async getFavourites(req, res) {
+        const invalidError = new Error("Invalid Account");
+        
+        try {
+            if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
+            
+            const account = await this.#service.findAccountById(req.body.userId);
+
+            if (account === null)
+                return res.status(404).json({ message: "could not find account" });    
+            
+            res.status(200).json({ favourites: account.favourites });
+        } catch (e) {
+            if (e === invalidError)
+                return res.status(400).json({ message: e.message });
+            
+            res.status(500).json({ message: e.message });
+        }
+    }
 }

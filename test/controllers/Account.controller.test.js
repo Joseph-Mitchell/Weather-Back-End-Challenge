@@ -241,4 +241,59 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 404);
         });
     });
+    
+    describe("getFavourites", () => {
+        
+        beforeEach(() => {
+            stubbedService = { findAccountById: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new AccountController(stubbedService);
+            testAccount = {
+                _id: "1",
+                email: "test@email.com",
+                password: "testPass",
+                favourites: [
+                    {
+                        "name": "London",
+                        "lat": 51.5073219,
+                        "lon": -0.1276474,
+                        "country": "GB",
+                        "state": "England"
+                    },
+                    {
+                        "name": "Glasgow",
+                        "lat": 55.8609825,
+                        "lon": -4.2488787,
+                        "country": "GB",
+                        "state": "Scotland"
+                    },
+                ]
+            };
+            testRequest = {
+                body: {
+                    id: testAccount._id,
+                }
+            };
+            
+            stubbedService.findAccountById.resolves(testAccount);
+        });
+        
+        afterEach(() => {
+            stubbedService = undefined;
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testAccount = undefined;
+        });
+        
+        it("should respond with 200 in normal circumstances", async () => {
+            //Act
+            await testController.getFavourites(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+        })
+    })
 });

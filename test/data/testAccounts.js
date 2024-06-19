@@ -1,27 +1,116 @@
 export const existingAccounts = [
     {
         email: "johnbohn@email.com",
-        password: "12345pass"
+        password: "12345pass",
+        favourites: [
+            {
+                "name": "London",
+                "lat": 51.5073219,
+                "lon": -0.1276474,
+                "country": "GB",
+                "state": "England"
+            },
+        ]
     },
     {
         email: "jamesbames@email.com",
-        password: "ssap54321"
+        password: "ssap54321",
+        favourites: [
+            {
+                "name": "Stoke-on-Trent",
+                "lat": 53.0162014,
+                "lon": -2.1812607,
+                "country": "GB",
+                "state": "England"
+            }
+        ]
     },
     {
         email: "jimbim@email.com",
-        password: "1p5a2s4s3"
+        password: "1p5a2s4s3",
+        favourites: [
+            {
+                "name": "Glasgow",
+                "lat": 55.8609825,
+                "lon": -4.2488787,
+                "country": "GB",
+                "state": "Scotland"
+            },
+            {
+                "name": "Edinburgh",
+                "lat": 55.9533456,
+                "lon": -3.1883749,
+                "country": "GB",
+                "state": "Scotland"
+            }
+        ]
     },
     {
         email: "jillbill@email.com",
-        password: "2s4s1a5p3"
+        password: "2s4s1a5p3",
+        favourites: [
+            {
+                "name": "London",
+                "lat": 51.5073219,
+                "lon": -0.1276474,
+                "country": "GB",
+                "state": "England"
+            },
+            {
+                "name": "Stoke-on-Trent",
+                "lat": 53.0162014,
+                "lon": -2.1812607,
+                "country": "GB",
+                "state": "England"
+            }  
+        ]
     },
     {
         email: "janebane@email.com",
-        password: "OTTFF7455"
+        password: "OTTFF7455",
+        favourites: [
+            {
+                "name": "Glasgow",
+                "lat": 55.8609825,
+                "lon": -4.2488787,
+                "country": "GB",
+                "state": "Scotland"
+            },
+            {
+                "name": "Edinburgh",
+                "lat": 55.9533456,
+                "lon": -3.1883749,
+                "country": "GB",
+                "state": "Scotland"
+            },
+            {
+                "name": "Tobermory",
+                "lat": 56.6227872,
+                "lon": -6.0682243,
+                "country": "GB",
+                "state": "Scotland"
+            },
+        ]
     },
     {
         email: "kyle@email.com",
-        password: "5547FFTTO"
+        password: "5547FFTTO",
+        favourites: [
+            {
+                "name": "London",
+                "lat": 51.5073219,
+                "lon": -0.1276474,
+                "country": "GB",
+                "state": "England"
+            },
+            {
+                "name": "Edinburgh",
+                "lat": 55.9533456,
+                "lon": -3.1883749,
+                "country": "GB",
+                "state": "Scotland"
+            },
+        ]
     },
 ];
 
