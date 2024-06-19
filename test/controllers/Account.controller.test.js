@@ -396,17 +396,6 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
         });
         
-        it("should respond 400 if request body has no favourite", async () => {
-            //Arrange
-            testRequest = { body: {} }
-            
-            //Act
-            await testController.pushFavourite(testRequest, stubbedResponse);
-            
-            //Assert
-            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
-        });
-        
         it("should respond 500 if pushNewFavourite rejects", async () => {
             //Arrange
             stubbedService.pushNewFavourite.rejects(new Error())

@@ -34,5 +34,8 @@ export default class AccountRouter {
         this.#router.get("/favourites", AccountMiddleware.authenticateToken, (req, res) => {
             this.#controller.getFavourites(req, res);
         });
+        this.#router.put("/favourites/add", AccountMiddleware.authenticateToken, (req, res) => {
+            this.#controller.pushFavourite(req, res);
+        });
     }
 }

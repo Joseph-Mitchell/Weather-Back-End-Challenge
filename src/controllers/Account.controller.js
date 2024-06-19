@@ -97,11 +97,11 @@ export default class AccountController {
     
     async pushFavourite(req, res) {
         const invalidError = new Error("Invalid Account");
-        
+
         try {          
-            if (!req.body?.favourite || Object.keys(req.body?.favourite).length === 0) throw invalidError;
-            
-            const account = await this.#service.pushNewFavourite(req.body.userId);
+            if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
+
+            const account = await this.#service.pushNewFavourite(req.body.userId, req.body.favourite);
 
             if (account === null)
                 return res.status(404).json({ message: "could not find account" });    

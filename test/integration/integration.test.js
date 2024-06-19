@@ -358,4 +358,60 @@ describe("Integration Tests", () => {
             assert.equal(actualResponse.status, 404);
         });
     });
+    
+    describe("Add Favourite", () => {
+        let dbAccount;
+        let encryptedId;
+        let actualResponse;
+        let actualAccount;
+        let testFavourite;
+        
+        beforeEach(async () => {
+            dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
+            encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+            
+            testFavourite = {
+                "name": "Test",
+                "lat": 50,
+                "lon": -50,
+                "country": "TT",
+                "state": "Test"
+            };
+        });
+        
+        afterEach(() => {
+            dbAccount = undefined;
+            encryptedId = undefined;
+            actualResponse = undefined;
+            actualAccount = undefined;
+        });
+        
+        it("should respond 204 in normal conditions", async () => {
+            //Act
+            actualResponse = await requester
+                .put("/favourites/add")
+                .send({ favourite: testFavourite })
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 204);
+        });
+        
+        it("should respond 500 if database is disconnected", async () => {
+            //Arrange
+            database.close();
+            
+            //Act
+            actualResponse = await requester
+                .put("/favourites/add")
+                .send({ favourite: testFavourite })
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 500);
+            
+            //Cleanup
+            await database.connect();
+        });
+    });
 });

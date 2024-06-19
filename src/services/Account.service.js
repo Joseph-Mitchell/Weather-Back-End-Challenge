@@ -30,6 +30,6 @@ export default class AccountService {
     }
     
     async pushNewFavourite(id, favourite) {
-        return await Account.findByIdAndUpdate(id, { $push: { "favourites": favourite } });
+        return await Account.findByIdAndUpdate(id, { $push: { favourites: favourite } });
     }
 }
