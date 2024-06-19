@@ -294,6 +294,17 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-        })
-    })
+        });
+        
+        it("should respond with 400 if request has no body", async () => {
+            //Arrange
+            testRequest = {};
+            
+            //Act
+            await testController.getFavourites(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+        });
+    });
 });
