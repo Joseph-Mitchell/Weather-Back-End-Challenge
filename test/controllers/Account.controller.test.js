@@ -317,5 +317,16 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
         });
+        
+        it("should respond with 404 if findAccountById resolves null", async () => {
+            //Arrange
+            stubbedService.findAccountById.resolves(null);
+            
+            //Act
+            await testController.getFavourites(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 404);
+        });
     });
 });
