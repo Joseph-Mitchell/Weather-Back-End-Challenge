@@ -15,7 +15,7 @@ import * as bcrypt from "bcrypt";
 
 import jwt from "jsonwebtoken";
 
-describe.skip("Integration Tests", () => {
+describe("Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -427,6 +427,41 @@ describe.skip("Integration Tests", () => {
              
             //Assert
             assert.equal(actualResponse.status, 404);
+        });
+    });
+    
+    describe("Remove Favourite", () => {
+        let dbAccount;
+        let encryptedId;
+        let actualResponse;
+        let actualAccount;
+        let testLat;
+        let testLon;
+        
+        beforeEach(async () => {
+            dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
+            encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+            
+            testLat = testData.existingAccounts[0].favourites[0].lat;
+            testLon = testData.existingAccounts[0].favourites[0].lon;
+        });
+        
+        afterEach(() => {
+            dbAccount = undefined;
+            encryptedId = undefined;
+            actualResponse = undefined;
+            actualAccount = undefined;
+        });
+        
+        it("should respond 204 in normal circumstances", async () => {
+            //Act
+            actualResponse = await requester
+                .put("/favourites/remove")
+                .send({ lat: testLat, lon: testLon })
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 204);
         });
     });
 });

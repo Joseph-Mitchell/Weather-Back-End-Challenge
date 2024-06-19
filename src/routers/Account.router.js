@@ -37,5 +37,8 @@ export default class AccountRouter {
         this.#router.put("/favourites/add", AccountMiddleware.authenticateToken, (req, res) => {
             this.#controller.pushFavourite(req, res);
         });
+        this.#router.put("/favourites/remove", AccountMiddleware.authenticateToken, (req, res) => {
+            this.#controller.pullFavourite(req, res);
+        });
     }
 }
