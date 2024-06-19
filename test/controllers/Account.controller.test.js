@@ -306,5 +306,16 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
         });
+        
+        it("should respond with 500 if findAccountById rejects", async () => {
+            //Arrange
+            stubbedService.findAccountById.rejects(new Error());
+            
+            //Act
+            await testController.getFavourites(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
     });
 });
