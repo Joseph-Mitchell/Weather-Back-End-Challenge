@@ -463,5 +463,22 @@ describe("Integration Tests", () => {
             //Assert
             assert.equal(actualResponse.status, 204);
         });
+                
+        it("should respond 500 if the database is disconnected", async () => {
+            //Arrange
+            database.close();
+            
+            //Act
+            actualResponse = await requester
+                .put("/favourites/remove")
+                .send({ lat: testLat, lon: testLon })
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 500);
+            
+            //Cleanup
+            await database.connect();
+        });
     });
 });
