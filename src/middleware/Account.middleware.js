@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 export default class AccountMiddleware {
     static authenticateToken = (req, res, next) => {
         let token = req.body["x-access-token"];
+
         if (!token) {
             return res.status(401).send({ message: "No token provided" });
         }
