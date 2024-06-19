@@ -27,12 +27,14 @@ export default class AccountMiddleware {
                     .notEmpty()
                     .isString()
                     .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g)
-                    .escape(),
+                    .escape()
+                    .withMessage("Please enter a valid email address"),
                 expressValidator
                     .body("password")
                     .notEmpty()
                     .isString()
-                    .escape(),
+                    .escape()
+                    .withMessage("Please enter a password"),
                 AccountMiddleware.handleValidationErrors,
             ];
         } catch (e) {
