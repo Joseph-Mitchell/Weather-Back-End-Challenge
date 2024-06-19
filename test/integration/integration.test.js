@@ -238,10 +238,24 @@ describe("Integration Tests", () => {
             //Act
             const actualResponse = await requester
                 .put("/changepass")
-                .send({ password: testPass })
+                .send({ password: testPass });
              
             //Assert
             assert.equal(actualResponse.status, 401);
-        })
+            assert.equal(actualResponse.body.message, "No token provided");
+        });
+        
+        it("should respond 401 if request has unrecognized token", async () => {
+            //Act
+            encryptedId = "hjytrd";
+            const actualResponse = await requester
+                .put("/changepass")
+                .send({ password: testPass })
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 401);
+            assert.equal(actualResponse.body.message, "Token not recognized");
+        });
     });
 });
