@@ -49,8 +49,10 @@ describe("Integration Tests", () => {
         }
         try {
             let testDataEncrypted = [];
-            testData.existingAccounts.forEach((account) => {
-                testDataEncrypted.push({ email: account.email, password: bcrypt.hashSync(account.password, 8) });
+            await testData.existingAccounts.forEach((account) => {
+                account = {...account};          
+                account.password = bcrypt.hashSync(account.password, 8);
+                testDataEncrypted.push(account);
             });
             await Account.insertMany(testDataEncrypted);
         } catch (e) {
@@ -291,4 +293,45 @@ describe("Integration Tests", () => {
             assert.equal(actualResponse.status, 404);
         });
     });
+    
+    describe("Get Favourites", () => {
+        let dbAccount;
+        let encryptedId;
+        let actualResponse;
+        let actualAccount;
+        
+        beforeEach(async () => { 
+            dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
+            encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+        });
+        
+        afterEach(() => {
+            dbAccount = undefined;
+            encryptedId = undefined;
+            actualResponse = undefined;
+            actualAccount = undefined;
+        });
+        
+        it("should respond 200 in normal circumstances", async () => {
+            //Act
+            actualResponse = await requester
+                .get("/favourites")
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 200);
+            
+            let responseWithoutIds = [];
+            actualResponse.body.forEach((favourite) => {
+                let fav = {};
+                fav.country = favourite.country;
+                fav.lat = favourite.lat;
+                fav.lon = favourite.lon;
+                fav.name = favourite.name;
+                fav.state = favourite.state;
+                responseWithoutIds.push(fav);
+            });
+            assert.deepEqual(responseWithoutIds, testData.existingAccounts[0].favourites);
+        })
+    })
 });

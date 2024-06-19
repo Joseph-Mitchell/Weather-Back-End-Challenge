@@ -42,7 +42,7 @@ export default class AccountController {
 
             if (account === null)
                 return res.status(404).json({ message: "email or password incorrect" });           
-            
+
             if (!bcrypt.compareSync(req.body.password, account.password)) {
                 return res.status(404).json({ message: "email or password incorrect" });
             }

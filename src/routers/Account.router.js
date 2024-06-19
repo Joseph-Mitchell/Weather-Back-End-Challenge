@@ -31,5 +31,8 @@ export default class AccountRouter {
         this.#router.put("/changepass", AccountMiddleware.authenticateToken, (req, res) => {
             this.#controller.changePassword(req, res);
         });
+        this.#router.get("/favourites", AccountMiddleware.authenticateToken, (req, res) => {
+            this.#controller.getFavourites(req, res);
+        });
     }
 }
