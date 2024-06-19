@@ -337,7 +337,7 @@ describe("Controller", () => {
     });
     
     describe("pushFavourite", () => {
-        let testFavourite
+        let testFavourite;
         
         beforeEach(() => {
             stubbedService = { pushNewFavourite: sinon.stub() };
@@ -383,6 +383,17 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
-        })
-    })
+        });
+        
+        it("should respond 400 if request has no body", async () => {
+            //Arrange
+            testRequest = {}
+            
+            //Act
+            await testController.pushFavourite(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+        });
+    });
 });
