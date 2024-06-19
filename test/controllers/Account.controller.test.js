@@ -335,4 +335,54 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 404);
         });
     });
+    
+    describe("pushFavourite", () => {
+        let testFavourite
+        
+        beforeEach(() => {
+            stubbedService = { pushNewFavourite: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new AccountController(stubbedService);
+            testFavourite = {
+                "name": "London",
+                "lat": 51.5073219,
+                "lon": -0.1276474,
+                "country": "GB",
+                "state": "England"
+            };
+            testAccount = {
+                _id: "1",
+                email: "test@email.com",
+                password: "testPass",
+                favourites: testFavourite
+            };
+            testRequest = {
+                body: {
+                    id: testAccount._id,
+                    favourites: testFavourite
+                }
+            };
+            
+            stubbedService.pushNewFavourite.resolves(testAccount);
+        });
+        
+        afterEach(() => {
+            stubbedService = undefined;
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testAccount = undefined;
+            testFavourites = undefined;
+        });
+        
+        it("should respond 204 in normal circumstances", async () => {
+            //Act
+            await testController.pushFavourite(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
+        })
+    })
 });

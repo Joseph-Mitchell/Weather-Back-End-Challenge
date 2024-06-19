@@ -28,4 +28,8 @@ export default class AccountService {
     async findAccountById(id) {
         return await Account.findById(id);
     }
+    
+    async pushNewFavourite(id, favourite) {
+        return await Account.findByIdAndUpdate(id, { $push: { "favourites": favourite } });
+    }
 }
