@@ -199,24 +199,49 @@ describe("Integration Tests", () => {
     });
     
     describe("change password", () => {
+        
+        let testPass;
+        let dbAccount;
+        let encryptedId;
+        let actualResponse;
+        let actualAccount;
+        
+        beforeEach(async () => { 
+            testPass = "newPass";
+            dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
+            encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+        });
+        
+        afterEach(() => {
+            testPass = undefined;
+            dbAccount = undefined;
+            encryptedId = undefined;
+            actualResponse = undefined;
+            actualAccount = undefined;
+        });
+        
         it("should respond 204 to a valid request", async () => {
             //Act
-            const testPass = "newPass";
-            
-            const dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
-
-            const encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
-
-            const actualResponse = await requester
+            actualResponse = await requester
                 .put("/changepass")
                 .send({ password: testPass })
                 .set("x-access-token", encryptedId);
 
-            const actualAccount = await Account.findById(dbAccount._id);
+            actualAccount = await Account.findById(dbAccount._id);
              
             //Assert
             assert.equal(actualResponse.status, 204);
             assert.isOk(bcrypt.compareSync(testPass, actualAccount.password));
+        });
+        
+        it("should respond 401 if request has no token", async () => {
+            //Act
+            const actualResponse = await requester
+                .put("/changepass")
+                .send({ password: testPass })
+             
+            //Assert
+            assert.equal(actualResponse.status, 401);
         })
-    })
+    });
 });
