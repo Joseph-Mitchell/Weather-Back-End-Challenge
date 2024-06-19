@@ -344,5 +344,18 @@ describe("Integration Tests", () => {
             //Cleanup
             await database.connect();
         });
+        
+        it("should respond 404 if user not found", async () => {
+            //Arrange
+            encryptedId = jwt.sign("666eb3347fddf9131e9fe94d", process.env.SECRET);
+            
+            //Act
+            actualResponse = await requester
+                .get("/favourites")
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 404);
+        });
     });
 });
