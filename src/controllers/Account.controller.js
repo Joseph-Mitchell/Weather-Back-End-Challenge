@@ -61,7 +61,7 @@ export default class AccountController {
         
         try {
             if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
-            
+
             const encryptedPass = bcrypt.hashSync(req.body.password, 8);
             const account = await this.#service.updateAccountPassword(req.body.userId, encryptedPass);
 

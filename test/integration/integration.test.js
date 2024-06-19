@@ -211,7 +211,7 @@ describe("Integration Tests", () => {
         beforeEach(async () => { 
             testPass = "newPass";
             dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
-            encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+            encryptedId = jwt.sign({ id: dbAccount._id.toString() }, process.env.SECRET);
         });
         
         afterEach(() => {
@@ -226,8 +226,7 @@ describe("Integration Tests", () => {
             //Act
             actualResponse = await requester
                 .put("/changepass")
-                .send({ password: testPass })
-                .set("x-access-token", encryptedId);
+                .send({ password: testPass, "x-access-token": encryptedId });
 
             actualAccount = await Account.findById(dbAccount._id);
              
@@ -254,8 +253,7 @@ describe("Integration Tests", () => {
             //Act
             const actualResponse = await requester
                 .put("/changepass")
-                .send({ password: testPass })
-                .set("x-access-token", encryptedId);
+                .send({ password: testPass, "x-access-token": encryptedId })
              
             //Assert
             assert.equal(actualResponse.status, 401);
@@ -269,8 +267,7 @@ describe("Integration Tests", () => {
             //Act
             const actualResponse = await requester
                 .put("/changepass")
-                .send({ password: testPass })
-                .set("x-access-token", encryptedId);
+                .send({ password: testPass, "x-access-token": encryptedId })
              
             //Assert
             assert.equal(actualResponse.status, 500);
@@ -286,8 +283,7 @@ describe("Integration Tests", () => {
             //Act
             const actualResponse = await requester
                 .put("/changepass")
-                .send({ password: testPass })
-                .set("x-access-token", encryptedId);
+                .send({ password: testPass, "x-access-token": encryptedId })
              
             //Assert
             assert.equal(actualResponse.status, 404);
@@ -298,25 +294,23 @@ describe("Integration Tests", () => {
         let dbAccount;
         let encryptedId;
         let actualResponse;
-        let actualAccount;
         
         beforeEach(async () => {
             dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
-            encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+            encryptedId = jwt.sign({ id: dbAccount._id.toString() }, process.env.SECRET);
         });
         
         afterEach(() => {
             dbAccount = undefined;
             encryptedId = undefined;
             actualResponse = undefined;
-            actualAccount = undefined;
         });
         
         it("should respond 200 in normal circumstances", async () => {
             //Act
             actualResponse = await requester
-                .get("/favourites")
-                .set("x-access-token", encryptedId);
+                .post("/favourites")
+                .send({ "x-access-token": encryptedId })
              
             //Assert
             assert.equal(actualResponse.status, 200);
@@ -335,8 +329,8 @@ describe("Integration Tests", () => {
             
             //Act
             actualResponse = await requester
-                .get("/favourites")
-                .set("x-access-token", encryptedId);
+                .post("/favourites")
+                .send({ "x-access-token": encryptedId })
              
             //Assert
             assert.equal(actualResponse.status, 500);
@@ -347,12 +341,12 @@ describe("Integration Tests", () => {
         
         it("should respond 404 if user not found", async () => {
             //Arrange
-            encryptedId = jwt.sign("666eb3347fddf9131e9fe94d", process.env.SECRET);
+            encryptedId = jwt.sign({ id: "666eb3347fddf9131e9fe94d" }, process.env.SECRET);
             
             //Act
             actualResponse = await requester
-                .get("/favourites")
-                .set("x-access-token", encryptedId);
+                .post("/favourites")
+                .send({ "x-access-token": encryptedId })
              
             //Assert
             assert.equal(actualResponse.status, 404);
@@ -363,12 +357,11 @@ describe("Integration Tests", () => {
         let dbAccount;
         let encryptedId;
         let actualResponse;
-        let actualAccount;
         let testFavourite;
         
         beforeEach(async () => {
             dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
-            encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+            encryptedId = jwt.sign({ id: dbAccount._id.toString() }, process.env.SECRET);
             
             testFavourite = {
                 "name": "Test",
@@ -383,15 +376,13 @@ describe("Integration Tests", () => {
             dbAccount = undefined;
             encryptedId = undefined;
             actualResponse = undefined;
-            actualAccount = undefined;
         });
         
         it("should respond 204 in normal conditions", async () => {
             //Act
             actualResponse = await requester
                 .put("/favourites/add")
-                .send({ favourite: testFavourite })
-                .set("x-access-token", encryptedId);
+                .send({ favourite: testFavourite, "x-access-token": encryptedId });
              
             //Assert
             assert.equal(actualResponse.status, 204);
@@ -404,8 +395,7 @@ describe("Integration Tests", () => {
             //Act
             actualResponse = await requester
                 .put("/favourites/add")
-                .send({ favourite: testFavourite })
-                .set("x-access-token", encryptedId);
+                .send({ favourite: testFavourite, "x-access-token": encryptedId });
              
             //Assert
             assert.equal(actualResponse.status, 500);
@@ -416,14 +406,13 @@ describe("Integration Tests", () => {
         
         it("should respond 404 if no matching account found", async () => {
             //Arrange
-            encryptedId = jwt.sign("666eb3347fddf9131e9fe94d", process.env.SECRET);
+            encryptedId = jwt.sign({ id: "666eb3347fddf9131e9fe94d" }, process.env.SECRET);
 
             
             //Act
             actualResponse = await requester
                 .put("/favourites/add")
-                .send({ favourite: testFavourite })
-                .set("x-access-token", encryptedId);
+                .send({ favourite: testFavourite, "x-access-token": encryptedId });
              
             //Assert
             assert.equal(actualResponse.status, 404);
@@ -440,7 +429,7 @@ describe("Integration Tests", () => {
         
         beforeEach(async () => {
             dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
-            encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
+            encryptedId = jwt.sign({ id: dbAccount._id.toString() }, process.env.SECRET);
             
             testLat = testData.existingAccounts[0].favourites[0].lat;
             testLon = testData.existingAccounts[0].favourites[0].lon;
@@ -457,8 +446,7 @@ describe("Integration Tests", () => {
             //Act
             actualResponse = await requester
                 .put("/favourites/remove")
-                .send({ lat: testLat, lon: testLon })
-                .set("x-access-token", encryptedId);
+                .send({ lat: testLat, lon: testLon, "x-access-token": encryptedId });
              
             //Assert
             assert.equal(actualResponse.status, 204);
@@ -471,8 +459,7 @@ describe("Integration Tests", () => {
             //Act
             actualResponse = await requester
                 .put("/favourites/remove")
-                .send({ lat: testLat, lon: testLon })
-                .set("x-access-token", encryptedId);
+                .send({ lat: testLat, lon: testLon, "x-access-token": encryptedId });
              
             //Assert
             assert.equal(actualResponse.status, 500);
@@ -483,13 +470,12 @@ describe("Integration Tests", () => {
         
         it("should respond 404 if no matching account found", async () => {
             //Arrange
-            encryptedId = jwt.sign("666eb3347fddf9131e9fe94d", process.env.SECRET);
+            encryptedId = jwt.sign({ id: "666eb3347fddf9131e9fe94d" }, process.env.SECRET);
             
             //Act
             actualResponse = await requester
                 .put("/favourites/remove")
-                .send({ lat: testLat, lon: testLon })
-                .set("x-access-token", encryptedId);
+                .send({ lat: testLat, lon: testLon, "x-access-token": encryptedId });
              
             //Assert
             assert.equal(actualResponse.status, 404);

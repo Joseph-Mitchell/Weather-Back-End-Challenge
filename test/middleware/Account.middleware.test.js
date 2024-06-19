@@ -36,13 +36,12 @@ describe("Middleware: ", () => {
         let stubbedRes;
         
         beforeEach(() => {
-            testToken = jwt.sign("75643", process.env.SECRET);
+            testToken = jwt.sign({ id: "75643" }, process.env.SECRET);
             nextStub = sinon.stub();
             testReq = {
-                headers: {
+                body: {
                     "x-access-token": testToken
-                },
-                body: {}
+                }
             };
             stubbedRes = {
                 status: sinon.stub().returnsThis(),
@@ -69,7 +68,7 @@ describe("Middleware: ", () => {
         it("should respond with 401 if no token provided in header", () => {           
             //Arrange
             testReq = {
-                headers: {}
+                body: {}
             };
             
             //Act
