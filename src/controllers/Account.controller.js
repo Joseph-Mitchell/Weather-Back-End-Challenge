@@ -80,9 +80,7 @@ export default class AccountController {
     async getFavourites(req, res) {
         const invalidError = new Error("Invalid Account");
         
-        try {
-            if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
-            
+        try {           
             const account = await this.#service.findAccountById(req.body.userId);
 
             if (account === null)

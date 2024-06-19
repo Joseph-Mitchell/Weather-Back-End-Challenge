@@ -313,17 +313,6 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.json, testFavourites);
         });
         
-        it("should respond with 400 if request has no body", async () => {
-            //Arrange
-            testRequest = {};
-            
-            //Act
-            await testController.getFavourites(testRequest, stubbedResponse);
-            
-            //Assert
-            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
-        });
-        
         it("should respond with 500 if findAccountById rejects", async () => {
             //Arrange
             stubbedService.findAccountById.rejects(new Error());

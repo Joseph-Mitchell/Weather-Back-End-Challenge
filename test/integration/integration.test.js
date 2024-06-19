@@ -300,7 +300,7 @@ describe("Integration Tests", () => {
         let actualResponse;
         let actualAccount;
         
-        beforeEach(async () => { 
+        beforeEach(async () => {
             dbAccount = await Account.findOne({ email: testData.existingAccounts[0].email });
             encryptedId = jwt.sign(dbAccount._id.toString(), process.env.SECRET);
         });
@@ -323,15 +323,26 @@ describe("Integration Tests", () => {
             
             let responseWithoutIds = [];
             actualResponse.body.forEach((favourite) => {
-                let fav = {};
-                fav.country = favourite.country;
-                fav.lat = favourite.lat;
-                fav.lon = favourite.lon;
-                fav.name = favourite.name;
-                fav.state = favourite.state;
+                let { _id, ...fav } = favourite;
                 responseWithoutIds.push(fav);
             });
             assert.deepEqual(responseWithoutIds, testData.existingAccounts[0].favourites);
-        })
-    })
+        });
+        
+        it("should respond 500 if database is disconnected", async () => {
+            //Arrange
+            database.close();
+            
+            //Act
+            actualResponse = await requester
+                .get("/favourites")
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 500);
+            
+            //Cleanup
+            await database.connect();
+        });
+    });
 });
