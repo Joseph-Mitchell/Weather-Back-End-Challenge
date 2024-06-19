@@ -7,8 +7,7 @@ const accountSchema = new Schema({
         name: String,
         lat: Number,
         lon: Number,
-        country: String,
-        state: String
+        country: String
     }]
 });
 

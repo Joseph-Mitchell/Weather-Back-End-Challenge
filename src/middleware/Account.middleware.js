@@ -3,8 +3,7 @@ import jwt from "jsonwebtoken";
 
 export default class AccountMiddleware {
     static authenticateToken = (req, res, next) => {
-        let token = req.headers["x-access-token"];
-
+        let token = req.body["x-access-token"];
         if (!token) {
             return res.status(401).send({ message: "No token provided" });
         }
@@ -13,7 +12,7 @@ export default class AccountMiddleware {
             if (err)
                 return res.status(401).send({ message: "Token not recognized" });
 
-            req.body.userId = decoded;
+            req.body.userId = decoded.id;
 
             next();
         });
@@ -25,16 +24,17 @@ export default class AccountMiddleware {
                 expressValidator
                     .body("email")
                     .notEmpty()
+                    .withMessage("Please enter an email address")
                     .isString()
                     .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g)
-                    .escape()
-                    .withMessage("Please enter a valid email address"),
+                    .withMessage("Please enter a valid email address")
+                    .escape(),
                 expressValidator
                     .body("password")
                     .notEmpty()
+                    .withMessage("Please enter a password")
                     .isString()
-                    .escape()
-                    .withMessage("Please enter a password"),
+                    .escape(),
                 AccountMiddleware.handleValidationErrors,
             ];
         } catch (e) {
@@ -45,6 +45,7 @@ export default class AccountMiddleware {
 
     static handleValidationErrors = (req, res, next) => {
         const errors = expressValidator.validationResult(req);
+
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }

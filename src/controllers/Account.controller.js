@@ -100,7 +100,7 @@ export default class AccountController {
 
         try {          
             if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
-
+console.log(req.body.userId, req.body.favourite)
             const account = await this.#service.pushNewFavourite(req.body.userId, req.body.favourite);
 
             if (account === null)
@@ -110,6 +110,8 @@ export default class AccountController {
         } catch (e) {
             if (e === invalidError)
                 return res.status(400).json({ message: e.message });
+            
+            console.log(e)
             
             res.status(500).json({ message: e.message });
         }
