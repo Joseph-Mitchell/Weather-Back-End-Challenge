@@ -360,7 +360,7 @@ describe("Controller", () => {
             testRequest = {
                 body: {
                     id: testAccount._id,
-                    favourites: testFavourite
+                    favourite: testFavourite
                 }
             };
             
@@ -388,6 +388,17 @@ describe("Controller", () => {
         it("should respond 400 if request has no body", async () => {
             //Arrange
             testRequest = {}
+            
+            //Act
+            await testController.pushFavourite(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
+        });
+        
+        it("should respond 400 if request body has no favourite", async () => {
+            //Arrange
+            testRequest = { body: {} }
             
             //Act
             await testController.pushFavourite(testRequest, stubbedResponse);

@@ -99,7 +99,7 @@ export default class AccountController {
         const invalidError = new Error("Invalid Account");
         
         try {          
-            if (!req.body?.favourites || Object.keys(req.body?.favourites).length === 0) throw invalidError;
+            if (!req.body?.favourite || Object.keys(req.body?.favourite).length === 0) throw invalidError;
             
             const account = await this.#service.pushNewFavourite(req.body.userId);
 
