@@ -257,5 +257,17 @@ describe("Integration Tests", () => {
             assert.equal(actualResponse.status, 401);
             assert.equal(actualResponse.body.message, "Token not recognized");
         });
+        
+        it("should respond 404 if request has no matching id", async () => {
+            //Act
+            encryptedId = jwt.sign("666eb3347fddf9131e9fe94d", process.env.SECRET);
+            const actualResponse = await requester
+                .put("/changepass")
+                .send({ password: testPass })
+                .set("x-access-token", encryptedId);
+             
+            //Assert
+            assert.equal(actualResponse.status, 404);
+        });
     });
 });
