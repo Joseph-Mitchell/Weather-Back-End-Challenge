@@ -406,5 +406,16 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 400);
         });
+        
+        it("should respond 500 if pushNewFavourite rejects", async () => {
+            //Arrange
+            stubbedService.pushNewFavourite.rejects(new Error())
+            
+            //Act
+            await testController.pushFavourite(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
     });
 });
