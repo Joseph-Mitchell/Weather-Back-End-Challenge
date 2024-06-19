@@ -464,5 +464,16 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
         });
+        
+        it("should respond 404 if pullFavourite resolves null", async () => {
+            //Arrange
+            stubbedService.pullFavourite.resolves(null);
+            
+            //Act
+            await testController.pullFavourite(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 404);
+        });
     });
 });
