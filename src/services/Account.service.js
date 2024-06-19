@@ -32,4 +32,8 @@ export default class AccountService {
     async pushNewFavourite(id, favourite) {
         return await Account.findByIdAndUpdate(id, { $push: { favourites: favourite } });
     }
+    
+    async pullFavourite(id, lat, lon) {
+        return await Account.findByIdAndUpdate(id, { $pull: { favourites: { lat: lat, lon: lon } } });
+    }
 }

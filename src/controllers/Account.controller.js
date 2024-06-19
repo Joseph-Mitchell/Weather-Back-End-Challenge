@@ -114,4 +114,24 @@ export default class AccountController {
             res.status(500).json({ message: e.message });
         }
     }
+    
+    async pullFavourite(req, res) {
+        const invalidError = new Error("Invalid Account");
+
+        try {          
+            if (!req.body || Object.keys(req.body).length === 0) throw invalidError;
+
+            const account = await this.#service.pullFavourite(req.body.userId, req.body.lat, req.body.lon);
+
+            if (account === null)
+                return res.status(404).json({ message: "could not find account" });    
+            
+            res.status(204).json({ message: "favourite was removed if present" });
+        } catch (e) {
+            if (e === invalidError)
+                return res.status(400).json({ message: e.message });
+            
+            res.status(500).json({ message: e.message });
+        }
+    }
 }
