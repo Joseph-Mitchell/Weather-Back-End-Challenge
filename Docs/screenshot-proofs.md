@@ -23,3 +23,7 @@
 ## Remove Favourite
 
 ![Remove Favourite](<img/Remove Favourite.jpg>)
+
+# Kanban
+
+![Kanban](img/Kanban.jpg)
