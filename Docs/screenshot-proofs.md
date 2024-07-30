@@ -402,3 +402,15 @@ So that the Presentation Layer can receive the list
 ## Domain Model Generation
 
 ![Domain Model Prompt](<img/AI Domain Model.jpg>)
+
+## Test Cases
+
+![Test Cases 1](<img/AI Test Cases 1.jpg>)
+
+![Test Cases 2](<img/AI Test Cases 2.jpg>)
+
+## Edge Cases
+
+![Edge Cases 1](<img/AI Edge Cases 1.jpg>)
+
+![Edge Cases 2](<img/AI Edge Cases 2.jpg>)
