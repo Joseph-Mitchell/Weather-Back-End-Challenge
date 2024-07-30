@@ -27,3 +27,7 @@
 # Kanban
 
 ![Kanban](img/Kanban.jpg)
+
+# User Story Breakdown
+
+![Story Breakdown](<img/Story Breakdown.png>)
